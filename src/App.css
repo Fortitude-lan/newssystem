@@ -1,5 +1,14 @@
 @import '~antd/dist/antd.css';
-.App {
-  text-align: center;
-  color: red;
+
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  position: absolute;
 }
+
+::-webkit-scrollbar-thumb {
+  background-color: #2c445c;
+}
+
+::-webkit-scrollbar-track {background-color: #001529;}
