@@ -8,7 +8,15 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #2c445c;
+  background-color: #1890ff;
 }
 
-::-webkit-scrollbar-track {background-color: #001529;}
+::-webkit-scrollbar-track {background-color: transparent;}
+
+.bold{
+  font-weight: bold;
+}
+
+.ant-btn:first-child{
+  margin-right: 15px;
+}

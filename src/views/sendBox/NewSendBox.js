@@ -3,7 +3,7 @@
  * @Author: wanghexing
  * @Date: 2021-12-24 15:17:40
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-01-14 10:58:59
+ * @LastEditTime: 2022-01-18 11:27:04
  */
 import React from 'react'
 import { HashRouter, Route, Routes, Navigate } from 'react-router-dom'
@@ -32,6 +32,7 @@ export default function NewSendBox() {
                         margin: '24px 16px',
                         padding: 24,
                         minHeight: 280,
+                        // overflow: 'auto'
                     }}
                 >
                     <Routes>
