@@ -3,7 +3,7 @@
  * @Author: wanghexing
  * @Date: 2022-01-13 17:05:33
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-01-17 17:36:51
+ * @LastEditTime: 2022-01-19 15:25:17
  */
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from "react-router";
@@ -80,7 +80,7 @@ export default function SideMenu() {
     useEffect(() => {
         //拿到接口数据
         axios.get("http://localhost:5500/rights?_embed=children").then(res => {
-            console.log(res.data);
+            // console.log(res.data);
             setMenu(res.data)
         })
     }, [])
