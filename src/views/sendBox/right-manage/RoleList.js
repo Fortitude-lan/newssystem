@@ -3,10 +3,11 @@
  * @Author: wanghexing
  * @Date: 2022-01-13 17:19:08
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-01-19 16:18:11
+ * @LastEditTime: 2022-01-19 17:28:27
  */
 import React, { useState, useEffect } from 'react'
-import { Spin, Table, Button, Modal,Tree } from 'antd';
+import { Spin, Table, Button, Modal, Tree } from 'antd';
+import DragModal from '../../../components/DragModal'
 import axios from 'axios';
 import { DeleteOutlined, UnorderedListOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 const { confirm } = Modal
@@ -17,24 +18,22 @@ export default function RoleList() {
     const [rightList, setrightList] = useState([])
     const [refresh, setRefresh] = useState(false);
     const [isModalVisible, setisModalVisible] = useState(false)
+    const [currentRight, setcurrentRight] = useState([])
 
     useEffect(() => {
         setloading(true)
         axios.get('http://localhost:5500/roles').then(res => {
-            console.log(res.data)
             setdataSource(res.data)
             setloading(false)
         })
-    }, [refresh])
-
-    useEffect(() => {
-        setloading(true)
         axios.get('http://localhost:5500/rights?_embed=children').then(res => {
             console.log(res.data)
             setrightList(res.data)
             setloading(false)
         })
+
     }, [refresh])
+
     const columns = [
         {
             title: 'ID',
@@ -57,7 +56,10 @@ export default function RoleList() {
                             type="primary"
                             shape="circle"
                             icon={<UnorderedListOutlined />}
-                            onClick={handleModalVisible}
+                            onClick={() => {
+                                handleModalVisible();
+                                setcurrentRight(record.rights)
+                            }}
                         />
                     </div>
                 )
@@ -83,8 +85,8 @@ export default function RoleList() {
         axios.delete(`http://localhost:5500/roles/${record.id}`).then((setRefresh))
     }
     const handleOk = () => {
-        console.log('ok')
         handleModalVisible()
+        // axios.patch(`http://localhost:5500/roles/${record.id}`, { rights: currentRight }).then(setRefresh)
     }
     const handleModalVisible = () => {
         setisModalVisible(!isModalVisible)
@@ -103,14 +105,24 @@ export default function RoleList() {
                 />
             </Spin>
 
-            <Modal title="权限配置" visible={isModalVisible} onOk={handleOk} onCancel={handleModalVisible}>
+            <DragModal
+                className="modal_h450"
+                title="权限配置"
+                visible={isModalVisible}
+                onOk={handleOk}
+                onCancel={handleModalVisible}
+
+            >
                 <Spin spinning={loading}>
                     <Tree
                         checkable
+                        checkStrictly
+                        onCheck={(checkedKeys)=>{setcurrentRight(checkedKeys); console.log(checkedKeys)}}
                         treeData={rightList}
+                        defaultCheckedKeys={currentRight} //非受控属性用useState控制
                     />
                 </Spin>
-            </Modal>
+            </DragModal>
         </div>
     )
 }
