@@ -3,17 +3,19 @@
  * @Author: wanghexing
  * @Date: 2022-01-13 17:18:30
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-01-20 16:01:19
+ * @LastEditTime: 2022-01-21 16:40:33
  */
 
-import React, { useState, useEffect } from 'react'
-import { Spin, Table, Button, Modal, Switch, Form, Input, Select, Row, Col } from 'antd';
+import React, { useState, useEffect, useRef } from 'react'
+import { Spin, Table, Button, Modal, Switch } from 'antd';
 import DragModal from '../../../components/DragModal'
 import axios from 'axios';
+import Useform from './Useform';
 import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 const { confirm } = Modal
-const { Option } = Select;
+
 export default function UserList() {
+    const useform = useRef(null)
     const [loading, setloading] = useState(false)
     const [dataSource, setdataSource] = useState([])
     const [regionList, setregionList] = useState([])
@@ -23,16 +25,14 @@ export default function UserList() {
     useEffect(() => {
         setloading(true)
         axios.get('http://localhost:5500/users?_expand=role').then(res => {
-            console.log(res.data)
             setdataSource(res.data)
         }).then(setloading(false))
         axios.get('http://localhost:5500/regions').then(res => {
             setregionList(res.data)
-        })
+        }).then(setloading(false))
         axios.get('http://localhost:5500/roles').then(res => {
-            console.log(res.data)
             setroleList(res.data)
-        })
+        }).then(setloading(false))
     }, [refresh])
     //删除确认
     const confirmMethod = (record) => {
@@ -118,19 +118,23 @@ export default function UserList() {
 
     }
     //弹框确认
-    const handleOk = () => {
-        // axios.patch(`http://localhost:5500/roles/${selectedRoleId}`, { rights: currentRight }).then(setRefresh)
-        // handleModalVisible()
-        
+    const addFormOK = () => {
+        useform.current.validateFields().then(value => {
+            handleModalVisible()
+            let params = {
+                ...value,
+                roleState: true,
+                default: false
+            }
+            axios.post(`http://localhost:5500/users`, { ...params }).then(setRefresh)
+
+        }).catch(err => { console.log(err) })
     }
     //弹框关闭
     const handleModalVisible = () => {
         setisModalVisible(!isModalVisible)
     }
-    const layout = {
-        labelCol: { span: 4 },
-        wrapperCol: { span: 18 },
-    };
+
     return (
         <div>
             <Button type="primary" onClick={handleModalVisible}>添加用户</Button>
@@ -141,7 +145,7 @@ export default function UserList() {
                     rowKey={(record) => record.id}
                     scroll={{ y: 600 }}
                     pagination={{
-                        pageSize: 5,
+                        pageSize: 10,
                     }}
                 />
             </Spin>
@@ -150,65 +154,17 @@ export default function UserList() {
                 title="添加用户"
                 visible={isModalVisible}
                 maskClosable={false}
-                onOk={handleOk}
                 onCancel={handleModalVisible}
                 footer={[
                     <Button key="back" onClick={handleModalVisible}>
                         取消
                     </Button>,
-                    <Button key="submit" type="primary" onClick={handleOk}>
+                    <Button key="submit" type="primary" onClick={addFormOK}>
                         确定
                     </Button>
                 ]}
             >
-                <Form>
-                    <Form.Item
-                        {...layout}
-                        label="用户名"
-                        name="username"
-                        rules={[{ required: true, message: 'Please input...' }]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        {...layout}
-                        label="密码"
-                        name="password"
-                        rules={[{ required: true, message: 'Please input...' }]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        {...layout}
-                        label="区域"
-                        name="region"
-                        rules={[{ required: true, message: 'Please input...' }]}
-                    >
-                        <Select
-                            placeholder="请选择"
-                            allowClear
-                        >
-                            {regionList.map(i =>
-                                <Option key={i.id} value={i.value}>{i.title}</Option>
-                            )}
-                        </Select>
-                    </Form.Item>
-                    <Form.Item
-                        {...layout}
-                        label="角色"
-                        name="roleid"
-                        rules={[{ required: true, message: 'Please input...' }]}
-                    >
-                        <Select
-                            placeholder="请选择"
-                            allowClear
-                        >
-                            {roleList.map(item =>
-                                <Option key={item.id} value={item.roleName}>{item.roleName}</Option>
-                            )}
-                        </Select>
-                    </Form.Item>
-                </Form>
+                <Useform ref={useform} regionList={regionList} roleList={roleList} />
             </DragModal>
         </div>
     )
