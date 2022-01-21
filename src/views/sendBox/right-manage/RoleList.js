@@ -3,7 +3,7 @@
  * @Author: wanghexing
  * @Date: 2022-01-13 17:19:08
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-01-19 17:28:27
+ * @LastEditTime: 2022-01-20 11:59:52
  */
 import React, { useState, useEffect } from 'react'
 import { Spin, Table, Button, Modal, Tree } from 'antd';
@@ -18,6 +18,7 @@ export default function RoleList() {
     const [rightList, setrightList] = useState([])
     const [refresh, setRefresh] = useState(false);
     const [isModalVisible, setisModalVisible] = useState(false)
+    const [selectedRoleId, setselectedRoleId] = useState(0)
     const [currentRight, setcurrentRight] = useState([])
 
     useEffect(() => {
@@ -27,7 +28,7 @@ export default function RoleList() {
             setloading(false)
         })
         axios.get('http://localhost:5500/rights?_embed=children').then(res => {
-            console.log(res.data)
+            // console.log(res.data)
             setrightList(res.data)
             setloading(false)
         })
@@ -59,6 +60,7 @@ export default function RoleList() {
                             onClick={() => {
                                 handleModalVisible();
                                 setcurrentRight(record.rights)
+                                setselectedRoleId(record.id)
                             }}
                         />
                     </div>
@@ -68,7 +70,7 @@ export default function RoleList() {
         }
     ];
 
-    //权限删除
+    //删除确认
     const confirmMethod = (record) => {
         console.log(record)
         confirm({
@@ -77,17 +79,18 @@ export default function RoleList() {
             // content: 'Bla bla ...',
             okText: '确认',
             cancelText: '取消',
-            onOk() { deleteMethod(record) },
+            onOk() { 
+                axios.delete(`http://localhost:5500/roles/${record.id}`).then((setRefresh))
+             },
 
         });
     }
-    const deleteMethod = (record) => {
-        axios.delete(`http://localhost:5500/roles/${record.id}`).then((setRefresh))
-    }
+    //弹框确认
     const handleOk = () => {
+        axios.patch(`http://localhost:5500/roles/${selectedRoleId}`, { rights: currentRight }).then(setRefresh)
         handleModalVisible()
-        // axios.patch(`http://localhost:5500/roles/${record.id}`, { rights: currentRight }).then(setRefresh)
     }
+    //弹框关闭
     const handleModalVisible = () => {
         setisModalVisible(!isModalVisible)
     }
@@ -111,15 +114,22 @@ export default function RoleList() {
                 visible={isModalVisible}
                 onOk={handleOk}
                 onCancel={handleModalVisible}
-
+                footer={[
+                    <Button key="back" onClick={handleModalVisible}>
+                      取消
+                    </Button>,
+                    <Button key="submit" type="primary" onClick={handleOk}>
+                      确定
+                    </Button>
+                  ]}
             >
                 <Spin spinning={loading}>
                     <Tree
                         checkable
                         checkStrictly
-                        onCheck={(checkedKeys)=>{setcurrentRight(checkedKeys); console.log(checkedKeys)}}
                         treeData={rightList}
                         defaultCheckedKeys={currentRight} //非受控属性用useState控制
+                        onCheck={(checkedKeys)=>{setcurrentRight(checkedKeys.checked)}}
                     />
                 </Spin>
             </DragModal>

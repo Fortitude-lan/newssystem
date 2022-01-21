@@ -3,7 +3,7 @@
  * @Author: wanghexing
  * @Date: 2022-01-13 17:05:33
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-01-19 15:25:17
+ * @LastEditTime: 2022-01-21 10:00:55
  */
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from "react-router";
@@ -13,7 +13,6 @@ import {
     HomeOutlined,
     SettingOutlined,
     UnorderedListOutlined,
-    TeamOutlined,
     SnippetsOutlined
 } from '@ant-design/icons';
 import './index.css'

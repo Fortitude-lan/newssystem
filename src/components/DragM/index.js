@@ -3,10 +3,8 @@
  * @Author: wanghexing
  * @Date: 2022-01-19 15:39:52
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-01-19 15:40:30
+ * @LastEditTime: 2022-01-21 10:04:45
  */
-'use strict';
-
 import React from 'react';
 import PropTypes from 'prop-types';
 export default class DragM extends React.Component {
@@ -28,7 +26,7 @@ export default class DragM extends React.Component {
         ty: 0
     };
     start = event => {
-        if (event.button != 0) {
+        if (event.button !== 0) {
             //只允许左键，右键问题在于不选择conextmenu就不会触发mouseup事件
             return;
         }

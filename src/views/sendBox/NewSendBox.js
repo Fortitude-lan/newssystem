@@ -3,10 +3,10 @@
  * @Author: wanghexing
  * @Date: 2021-12-24 15:17:40
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-01-18 11:27:04
+ * @LastEditTime: 2022-01-21 10:00:27
  */
 import React from 'react'
-import { HashRouter, Route, Routes, Navigate } from 'react-router-dom'
+import {Route, Routes, Navigate } from 'react-router-dom'
 import SideMenu from '../../components/sendBox/SideMenu'
 import TopHeader from '../../components/sendBox/TopHeader'
 import Home from './home/Home'
