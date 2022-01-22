@@ -3,7 +3,7 @@
  * @Author: wanghexing
  * @Date: 2022-01-13 17:18:30
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-01-21 16:40:33
+ * @LastEditTime: 2022-01-22 16:50:52
  */
 
 import React, { useState, useEffect, useRef } from 'react'
@@ -15,12 +15,15 @@ import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-de
 const { confirm } = Modal
 
 export default function UserList() {
-    const useform = useRef(null)
+    const addForm = useRef(null)
+    const updateForm = useRef(null)
     const [loading, setloading] = useState(false)
     const [dataSource, setdataSource] = useState([])
     const [regionList, setregionList] = useState([])
     const [roleList, setroleList] = useState([])
-    const [isModalVisible, setisModalVisible] = useState(false)
+    const [addModalVisible, setaddModalVisible] = useState(false)
+    const [updateModalVisible, setupdateModalVisible] = useState(false);
+    const [selectedRow, setselectedRow] = useState({});
     const [refresh, setRefresh] = useState(false);
     useEffect(() => {
         setloading(true)
@@ -36,7 +39,6 @@ export default function UserList() {
     }, [refresh])
     //删除确认
     const confirmMethod = (record) => {
-        console.log(record)
         confirm({
             title: '确定要删除吗？',
             icon: <ExclamationCircleOutlined />,
@@ -53,6 +55,18 @@ export default function UserList() {
         {
             title: '区域',
             dataIndex: 'region',
+            filters: [
+                {
+                    text: '全球',
+                    value: '全球'
+                },
+                ...regionList.map(i => ({
+                    text: i.title,
+                    value: i.value
+                }))
+            ],
+            // filterSearch: true,
+            onFilter: (value, record) => value == '全球' ? record.region === '' : record.region.includes(value),
             render: (text) => {
                 return <span className="bold">{text == '' ? '全球' : text}</span>
             }
@@ -78,7 +92,6 @@ export default function UserList() {
                         disabled={record.default}
                         onChange={() => switchMethod(record)}
                     />
-
                 )
             }
         },
@@ -98,7 +111,7 @@ export default function UserList() {
                             type="primary"
                             shape="circle"
                             icon={<EditOutlined />}
-                            onClick={() => { }}
+                            onClick={() => updateModal(record)}
                             disabled={record.default}
                         />
                     </div>
@@ -107,6 +120,7 @@ export default function UserList() {
 
         }
     ];
+
     //权限开关
     const switchMethod = (record) => {
         //更新列表
@@ -118,9 +132,9 @@ export default function UserList() {
 
     }
     //弹框确认
-    const addFormOK = () => {
-        useform.current.validateFields().then(value => {
-            handleModalVisible()
+    const addformOK = () => {
+        addForm.current.validateFields().then(value => {
+            addModal()
             let params = {
                 ...value,
                 roleState: true,
@@ -131,13 +145,27 @@ export default function UserList() {
         }).catch(err => { console.log(err) })
     }
     //弹框关闭
-    const handleModalVisible = () => {
-        setisModalVisible(!isModalVisible)
+    const addModal = () => {
+        setaddModalVisible(!addModalVisible)
     }
-
+    //修改
+    const updateModal = (record) => {
+        setselectedRow(record)
+        updateVisible()
+    }
+    const updateVisible = () => {
+        setupdateModalVisible(!updateModalVisible)
+    }
+    //修改确认
+    const updateFormOK = () => {
+        updateForm.current.validateFields().then(value => {
+            updateVisible()
+            axios.patch(`http://localhost:5500/users/${selectedRow.id}`, value).then(setRefresh)
+        })
+    }
     return (
         <div>
-            <Button type="primary" onClick={handleModalVisible}>添加用户</Button>
+            <Button type="primary" onClick={addModal}>添加用户</Button>
             <Spin spinning={loading}>
                 <Table
                     dataSource={dataSource}
@@ -152,19 +180,36 @@ export default function UserList() {
             <DragModal
                 className="modal_h450"
                 title="添加用户"
-                visible={isModalVisible}
+                visible={addModalVisible}
                 maskClosable={false}
-                onCancel={handleModalVisible}
+                onCancel={addModal}
                 footer={[
-                    <Button key="back" onClick={handleModalVisible}>
+                    <Button key="back" onClick={addModal}>
                         取消
                     </Button>,
-                    <Button key="submit" type="primary" onClick={addFormOK}>
+                    <Button key="submit" type="primary" onClick={addformOK}>
                         确定
                     </Button>
                 ]}
             >
-                <Useform ref={useform} regionList={regionList} roleList={roleList} />
+                <Useform ref={addForm} regionList={regionList} roleList={roleList} />
+            </DragModal>
+            <DragModal
+                className="modal_h450"
+                title="编辑用户"
+                visible={updateModalVisible}
+                maskClosable={false}
+                onCancel={updateVisible}
+                footer={[
+                    <Button key="back" onClick={updateVisible}>
+                        取消
+                    </Button>,
+                    <Button key="submit" type="primary" onClick={updateFormOK}>
+                        保存
+                    </Button>
+                ]}
+            >
+                <Useform ref={updateForm} regionList={regionList} roleList={roleList} selectedRow={selectedRow} />
             </DragModal>
         </div>
     )

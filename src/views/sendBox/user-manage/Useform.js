@@ -3,9 +3,9 @@
  * @Author: wanghexing
  * @Date: 2022-01-21 14:03:43
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-01-21 15:51:14
+ * @LastEditTime: 2022-01-22 16:52:05
  */
-import React, { forwardRef, useState } from 'react'
+import React, { forwardRef, useEffect, useState } from 'react'
 import { Form, Input, Select } from 'antd';
 const { Option } = Select;
 
@@ -16,9 +16,13 @@ const Useform = forwardRef((props, ref) => {
         wrapperCol: { span: 18 },
     };
     const [isdisable, setisdisable] = useState(false)
+    useEffect(() => {
+        props.selectedRow && props.selectedRow.roleId == 1 ? setisdisable(true) : setisdisable(false)
+    }, [props.selectedRow]);
+
     return (
         <>
-            <Form ref={ref}>
+            <Form ref={ref} initialValues={props.selectedRow}>
                 <Form.Item
                     {...layout}
                     placeholder="请选择"
