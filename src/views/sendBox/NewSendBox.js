@@ -3,10 +3,10 @@
  * @Author: wanghexing
  * @Date: 2021-12-24 15:17:40
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-01-21 10:00:27
+ * @LastEditTime: 2022-01-25 09:30:05
  */
 import React from 'react'
-import {Route, Routes, Navigate } from 'react-router-dom'
+import { Route, Routes, Navigate } from 'react-router-dom'
 import SideMenu from '../../components/sendBox/SideMenu'
 import TopHeader from '../../components/sendBox/TopHeader'
 import Home from './home/Home'
@@ -42,7 +42,6 @@ export default function NewSendBox() {
                         <Route path="/right-manage/right/list" element={<RightList />} />
 
                         <Route path="/" element={<Navigate replace from="/" to="home" />} />
-
                         <Route path="*" element={<NoPermission />} />
                     </Routes>
                 </Content>

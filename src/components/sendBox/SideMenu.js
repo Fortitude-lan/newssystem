@@ -3,7 +3,7 @@
  * @Author: wanghexing
  * @Date: 2022-01-13 17:05:33
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-01-21 10:00:55
+ * @LastEditTime: 2022-01-25 11:00:44
  */
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from "react-router";
@@ -83,10 +83,10 @@ export default function SideMenu() {
             setMenu(res.data)
         })
     }, [])
-
+    const { role: { rights } } = JSON.parse(localStorage.getItem('token'))
     //是否有权限
     const hasPermisson = (item) => {
-        return item.pagepermisson === 1
+        return item.pagepermisson === 1 && rights.includes(item.key)
     }
 
     const renderMenu = (menu) => {

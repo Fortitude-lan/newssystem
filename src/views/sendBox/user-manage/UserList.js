@@ -3,7 +3,7 @@
  * @Author: wanghexing
  * @Date: 2022-01-13 17:18:30
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-01-22 16:50:52
+ * @LastEditTime: 2022-01-25 11:26:18
  */
 
 import React, { useState, useEffect, useRef } from 'react'
@@ -25,6 +25,8 @@ export default function UserList() {
     const [updateModalVisible, setupdateModalVisible] = useState(false);
     const [selectedRow, setselectedRow] = useState({});
     const [refresh, setRefresh] = useState(false);
+
+    const { roleId,regoin} = JSON.parse(localStorage.getItem('token'))
     useEffect(() => {
         setloading(true)
         axios.get('http://localhost:5500/users?_expand=role').then(res => {
@@ -34,6 +36,8 @@ export default function UserList() {
             setregionList(res.data)
         }).then(setloading(false))
         axios.get('http://localhost:5500/roles').then(res => {
+            const list = res.data
+            roleId===1?list:
             setroleList(res.data)
         }).then(setloading(false))
     }, [refresh])

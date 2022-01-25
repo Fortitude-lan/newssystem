@@ -3,9 +3,10 @@
  * @Author: wanghexing
  * @Date: 2022-01-13 17:05:43
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-01-14 13:56:05
+ * @LastEditTime: 2022-01-25 11:10:13
  */
 import React, { useState } from 'react'
+import { useNavigate } from "react-router";
 import { Layout, Menu, Dropdown, Avatar } from 'antd';
 import {
     UserOutlined,
@@ -15,19 +16,18 @@ import {
 const { Header } = Layout;
 export default function TopHeader() {
     const [collapsed, setCollapsed] = useState(false);
-    const changeCollapsed = () => {
-        setCollapsed(!collapsed)
-    }
-
+    const changeCollapsed = () => { setCollapsed(!collapsed) }
+    let navigate = useNavigate();
+    const { role: { roleName }, username } = JSON.parse(localStorage.getItem('token'))
     const menu = (
         <Menu>
             <Menu.Item>
-                超级管理员
+                {roleName}
             </Menu.Item>
             {/* <Menu.Item>
-                1st menu item
+               修改密码
             </Menu.Item> */}
-            <Menu.Item danger>退出</Menu.Item>
+            <Menu.Item danger onClick={() => { localStorage.removeItem('token'); navigate("/login"); }}>退出</Menu.Item>
         </Menu>
     );
     return (
@@ -36,7 +36,7 @@ export default function TopHeader() {
                 collapsed ? <MenuUnfoldOutlined onClick={changeCollapsed} /> : <MenuFoldOutlined onClick={changeCollapsed} />
             }
             <div style={{ float: "right" }}>
-                欢迎admin回来！
+                欢迎 <span style={{ color: "#1890ff" }}>{username}</span> 回来！
                 <Dropdown overlay={menu}>
                     <span><Avatar size={35} icon={<UserOutlined />} /></span>
                 </Dropdown>
