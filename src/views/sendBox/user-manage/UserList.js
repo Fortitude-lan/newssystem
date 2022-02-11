@@ -3,7 +3,7 @@
  * @Author: wanghexing
  * @Date: 2022-01-13 17:18:30
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-01-25 11:26:18
+ * @LastEditTime: 2022-02-10 11:22:37
  */
 
 import React, { useState, useEffect, useRef } from 'react'
@@ -26,19 +26,24 @@ export default function UserList() {
     const [selectedRow, setselectedRow] = useState({});
     const [refresh, setRefresh] = useState(false);
 
-    const { roleId,regoin} = JSON.parse(localStorage.getItem('token'))
+    const { roleId, region } = JSON.parse(localStorage.getItem('token'))
     useEffect(() => {
         setloading(true)
+        //用户列表
         axios.get('http://localhost:5500/users?_expand=role').then(res => {
-            setdataSource(res.data)
+            const list = res.data
+            setdataSource(roleId === 1 ? list : list.filter(i => i.region == region))
         }).then(setloading(false))
+        //地区列表
         axios.get('http://localhost:5500/regions').then(res => {
-            setregionList(res.data)
+            const list = res.data
+            console.log(list);
+            setregionList(roleId === 1 ? list : list.filter(i => i.value == region))
         }).then(setloading(false))
+        //角色列表
         axios.get('http://localhost:5500/roles').then(res => {
             const list = res.data
-            roleId===1?list:
-            setroleList(res.data)
+            setroleList(roleId === 1 ? list : list.filter(i => i.roleType > roleId))
         }).then(setloading(false))
     }, [refresh])
     //删除确认

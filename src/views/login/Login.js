@@ -3,10 +3,10 @@
  * @Author: wanghexing
  * @Date: 2021-12-24 15:16:20
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-01-25 12:23:58
+ * @LastEditTime: 2022-02-10 10:39:24
  */
 import React from 'react'
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import Particles from "react-tsparticles";
@@ -20,8 +20,9 @@ export default function Login() {
                 if (res.data.length === 0) {
                     message.error('账号和密码不匹配')
                 } else {
+                    console.log(location);
                     localStorage.setItem('token', JSON.stringify(res.data[0]))
-                    navigate("/")
+                    navigate("/home")
                 }
 
             })
