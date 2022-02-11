@@ -30,18 +30,18 @@ export default function UserList() {
     useEffect(() => {
         setloading(true)
         //用户列表
-        axios.get('http://localhost:5500/users?_expand=role').then(res => {
+        axios.get('/users?_expand=role').then(res => {
             const list = res.data
             setdataSource(roleId === 1 ? list : list.filter(i => i.region == region))
         }).then(setloading(false))
         //地区列表
-        axios.get('http://localhost:5500/regions').then(res => {
+        axios.get('/regions').then(res => {
             const list = res.data
             console.log(list);
             setregionList(roleId === 1 ? list : list.filter(i => i.value == region))
         }).then(setloading(false))
         //角色列表
-        axios.get('http://localhost:5500/roles').then(res => {
+        axios.get('/roles').then(res => {
             const list = res.data
             setroleList(roleId === 1 ? list : list.filter(i => i.roleType > roleId))
         }).then(setloading(false))
@@ -55,7 +55,7 @@ export default function UserList() {
             okText: '确认',
             cancelText: '取消',
             onOk() {
-                axios.delete(`http://localhost:5500/users/${record.id}`).then((setRefresh))
+                axios.delete(`/users/${record.id}`).then((setRefresh))
             },
 
         });
@@ -135,7 +135,7 @@ export default function UserList() {
         //更新列表
         record.roleState = !record.roleState
         setdataSource([...dataSource])
-        axios.patch(`http://localhost:5500/users/${record.id}`, {
+        axios.patch(`/users/${record.id}`, {
             roleState: record.roleState
         })
 
@@ -149,7 +149,7 @@ export default function UserList() {
                 roleState: true,
                 default: false
             }
-            axios.post(`http://localhost:5500/users`, { ...params }).then(setRefresh)
+            axios.post(`/users`, { ...params }).then(setRefresh)
 
         }).catch(err => { console.log(err) })
     }
@@ -169,7 +169,7 @@ export default function UserList() {
     const updateFormOK = () => {
         updateForm.current.validateFields().then(value => {
             updateVisible()
-            axios.patch(`http://localhost:5500/users/${selectedRow.id}`, value).then(setRefresh)
+            axios.patch(`/users/${selectedRow.id}`, value).then(setRefresh)
         })
     }
     return (

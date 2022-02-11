@@ -23,11 +23,11 @@ export default function RoleList() {
 
     useEffect(() => {
         setloading(true)
-        axios.get('http://localhost:5500/roles').then(res => {
+        axios.get('/roles').then(res => {
             setdataSource(res.data)
             setloading(false)
         })
-        axios.get('http://localhost:5500/rights?_embed=children').then(res => {
+        axios.get('/rights?_embed=children').then(res => {
             // console.log(res.data)
             setrightList(res.data)
             setloading(false)
@@ -80,14 +80,14 @@ export default function RoleList() {
             okText: '确认',
             cancelText: '取消',
             onOk() { 
-                axios.delete(`http://localhost:5500/roles/${record.id}`).then((setRefresh))
+                axios.delete(`/roles/${record.id}`).then((setRefresh))
              },
 
         });
     }
     //弹框确认
     const handleOk = () => {
-        axios.patch(`http://localhost:5500/roles/${selectedRoleId}`, { rights: currentRight }).then(setRefresh)
+        axios.patch(`/roles/${selectedRoleId}`, { rights: currentRight }).then(setRefresh)
         handleModalVisible()
     }
     //弹框关闭

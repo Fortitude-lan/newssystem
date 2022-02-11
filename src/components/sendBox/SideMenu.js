@@ -78,7 +78,7 @@ export default function SideMenu() {
     const [menu, setMenu] = useState([])
     useEffect(() => {
         //拿到接口数据
-        axios.get("http://localhost:5500/rights?_embed=children").then(res => {
+        axios.get("/rights?_embed=children").then(res => {
             // console.log(res.data);
             setMenu(res.data)
         })

@@ -3,7 +3,7 @@
  * @Author: wanghexing
  * @Date: 2022-02-10 11:33:11
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-02-10 16:51:25
+ * @LastEditTime: 2022-02-11 17:39:56
  */
 import React, { useEffect, useState } from 'react'
 import { Route, Routes, Navigate } from 'react-router-dom'
@@ -11,6 +11,7 @@ import Home from '../../views/sendBox/home/Home'
 import NewsAdd from '../../views/sendBox/newsManage/NewsAdd'
 import NewsDraft from '../../views/sendBox/newsManage/NewsDraft'
 import NewsCategory from '../../views/sendBox/newsManage/NewsCategory'
+import NewsPreview from '../../views/sendBox/newsManage/NewsPreview'
 import NoPermission from '../../views/sendBox/noPermission/NoPermission'
 import RightList from '../../views/sendBox/right-manage/RightList'
 import RoleList from '../../views/sendBox/right-manage/RoleList'
@@ -29,6 +30,7 @@ const LocalRouterMap = {
     "/news-manage/add": <NewsAdd />,
     "/news-manage/draft": <NewsDraft />,
     "/news-manage/category": <NewsCategory />,
+    "/news-manage/preview/:id": <NewsPreview />,
     "/audit-manage/audit": <Audit />,
     "/audit-manage/list": <AuditList />,
     "/publish-manage/unpublished": <Unpublished />,
@@ -40,8 +42,8 @@ export default function RouterList() {
     const [backRouteList, setbackRouteList] = useState([])
     useEffect(() => {
         Promise.all([
-            axios.get('http://localhost:5500/rights'),
-            axios.get('http://localhost:5500/children'),
+            axios.get('/rights'),
+            axios.get('/children'),
         ]).then(res => {
             setbackRouteList([...res[0].data, ...res[1].data]);
         })
@@ -50,8 +52,8 @@ export default function RouterList() {
     const { role: { rights } } = JSON.parse(localStorage.getItem('token'))
     //路由筛选
     const checkRoute = (item) => {
-        console.log(item);
-        return LocalRouterMap[item.key] && item.pagepermisson
+        // console.log(item);
+        return LocalRouterMap[item.key] && (item.pagepermisson || item.routepermisson)
     }
     //权限筛选
     const checkUserPermission = (item) => {

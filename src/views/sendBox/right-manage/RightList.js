@@ -17,7 +17,7 @@ export default function RightList() {
     const [refresh, setRefresh] = useState(false);
     useEffect(() => {
         setloading(true)
-        axios.get('http://localhost:5500/rights?_embed=children').then(res => {
+        axios.get('/rights?_embed=children').then(res => {
             const list = res.data;
             setdataSource(mapList(list))
             setloading(false)
@@ -119,10 +119,10 @@ export default function RightList() {
         //目前权限列表值有两层 1 rights 2 children
         if (record.grade === 1) {
             // setdataSource(dataSource.filter(data => data.id !== record.id));
-            axios.delete(`http://localhost:5500/rights/${record.id}`).then((setRefresh))
+            axios.delete(`/rights/${record.id}`).then((setRefresh))
 
         } else {
-            axios.delete(`http://localhost:5500/children/${record.id}`).then(setRefresh)
+            axios.delete(`/children/${record.id}`).then(setRefresh)
         }
 
     }
@@ -132,11 +132,11 @@ export default function RightList() {
         record.pagepermisson = Number(!record.pagepermisson)
         setdataSource([...dataSource])
         if (record.grade === 1) {
-            axios.patch(`http://localhost:5500/rights/${record.id}`, {
+            axios.patch(`/rights/${record.id}`, {
                 pagepermisson: record.pagepermisson
             })
         } else {
-            axios.patch(`http://localhost:5500/children/${record.id}`, {
+            axios.patch(`/children/${record.id}`, {
                 pagepermisson: record.pagepermisson
             })
         }

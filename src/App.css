@@ -45,8 +45,12 @@
   font-weight: bold;
 }
 
-.ant-btn:first-child {
-  margin-right: 15px;
+.ant-btn {
+  margin-right: 10px;
+}
+
+.ant-btn:last-child {
+  margin-right: 0px;
 }
 
 body {

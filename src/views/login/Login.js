@@ -14,7 +14,7 @@ import axios from 'axios';
 export default function Login() {
     let navigate = useNavigate();
     const onFinish = (value) => {
-        axios.get(`http://localhost:5500/users?_expand=role&username=${value.username}&password=${value.password}&roleState=true`)
+        axios.get(`/users?_expand=role&username=${value.username}&password=${value.password}&roleState=true`)
             .then(res => {
                 console.log(res.data)
                 if (res.data.length === 0) {
