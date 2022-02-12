@@ -8,7 +8,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { notification, PageHeader, Steps, Button, Form, Input, Select, message } from 'antd';
 import axios from 'axios';
-import NewsEditor from '../../../components/NewsEditor/NewsEditor'
+import NewsEditor from '../../../components/Editor/NewsEditor'
 import { useNavigate } from "react-router";
 
 const { Step } = Steps;

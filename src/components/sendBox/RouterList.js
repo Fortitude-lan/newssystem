@@ -12,6 +12,7 @@ import NewsAdd from '../../views/sendBox/newsManage/NewsAdd'
 import NewsDraft from '../../views/sendBox/newsManage/NewsDraft'
 import NewsCategory from '../../views/sendBox/newsManage/NewsCategory'
 import NewsPreview from '../../views/sendBox/newsManage/NewsPreview'
+import NewsUpdate from '../../views/sendBox/newsManage/NewsUpdate'
 import NoPermission from '../../views/sendBox/noPermission/NoPermission'
 import RightList from '../../views/sendBox/right-manage/RightList'
 import RoleList from '../../views/sendBox/right-manage/RoleList'
@@ -31,6 +32,7 @@ const LocalRouterMap = {
     "/news-manage/draft": <NewsDraft />,
     "/news-manage/category": <NewsCategory />,
     "/news-manage/preview/:id": <NewsPreview />,
+    "/news-manage/update/:id": <NewsUpdate />,
     "/audit-manage/audit": <Audit />,
     "/audit-manage/list": <AuditList />,
     "/publish-manage/unpublished": <Unpublished />,

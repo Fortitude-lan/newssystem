@@ -3,12 +3,14 @@
  * @Author: wanghexing
  * @Date: 2022-02-10 11:58:18
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-02-11 17:53:27
+ * @LastEditTime: 2022-02-12 15:45:21
  */
 import React, { useEffect, useState } from 'react'
 import { Spin, Table, Tag, Button, Modal, Switch } from 'antd';
 import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import axios from 'axios';
+import { useNavigate } from "react-router";
+
 const { confirm } = Modal
 
 export default function NewsDraft() {
@@ -16,6 +18,7 @@ export default function NewsDraft() {
   const [loading, setloading] = useState(false)
   const [refresh, setRefresh] = useState(false);
   const { username } = JSON.parse(localStorage.getItem('token'))
+  const navigate = useNavigate();
   useEffect(() => {
     setloading(true)
     axios.get(`/news?author=${username}&auditState=0&_expand=category`).then(res => {
@@ -38,10 +41,7 @@ export default function NewsDraft() {
 
     });
   }
-  const catDitail = (record) => {
-    setnewsDetail(record)
-    console.log(record);
-  }
+
   const columns = [
     {
       title: 'ID',
@@ -54,7 +54,7 @@ export default function NewsDraft() {
       title: '新闻标题',
       dataIndex: 'title',
       render: (text, record) => {
-        return <a href={`#/news-manage/preview/${record.id}`} onClick={() => catDitail(record)}>{text}</a>
+        return <a href={`#/news-manage/preview/${record.id}`} >{text}</a>
       }
     },
     {
@@ -84,7 +84,7 @@ export default function NewsDraft() {
               ghost
               shape="circle"
               icon={<EditOutlined />}
-              onClick={() => updateModal(record)}
+              onClick={() => navigate(`/news-manage/update/${record.id}`)}
               disabled={record.default}
             />
             <Button
