@@ -3,7 +3,7 @@
  * @Author: wanghexing
  * @Date: 2022-02-10 11:57:55
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-02-11 16:16:51
+ * @LastEditTime: 2022-02-21 11:25:26
  */
 import React, { useState, useEffect, useRef } from 'react'
 import { notification, PageHeader, Steps, Button, Form, Input, Select, message } from 'antd';
@@ -49,7 +49,7 @@ export default function NewsAdd() {
       "region": User.region ? User.region : "全球",
       "author": User.username,
       "roleId": User.roleId,
-      "auditState": 0,
+      "auditState": 1,
       "publishState": 0,
       "createTime": Date.now(),
       "star": 0,

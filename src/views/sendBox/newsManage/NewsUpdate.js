@@ -3,7 +3,7 @@
  * @Author: wanghexing
  * @Date: 2022-02-10 11:57:55
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-02-12 16:52:32
+ * @LastEditTime: 2022-02-14 10:37:29
  */
 import React, { useState, useEffect, useRef } from 'react'
 import { useParams } from "react-router";
@@ -60,7 +60,7 @@ export default function NewsUpdate() {
         axios.patch(`/news/${params.id}`, {
             ...formInfo,
             "content": content,
-            "auditState": 0,
+            "auditState": auditState,
         }).then(res => {
             navigate(auditState === 0 ? "/news-manage/draft" : "/audit-manage/list");
             notification.success({

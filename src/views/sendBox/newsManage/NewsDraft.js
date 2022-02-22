@@ -3,10 +3,10 @@
  * @Author: wanghexing
  * @Date: 2022-02-10 11:58:18
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-02-12 15:45:21
+ * @LastEditTime: 2022-02-14 10:23:56
  */
 import React, { useEffect, useState } from 'react'
-import { Spin, Table, Tag, Button, Modal, Switch } from 'antd';
+import { notification, Spin, Table, Tag, Button, Modal, Switch } from 'antd';
 import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { useNavigate } from "react-router";
@@ -41,7 +41,19 @@ export default function NewsDraft() {
 
     });
   }
+  const handleCheck = (id) => {
+    axios.patch(`/news/${id}`, { auditState: 1 }).then(res => {
+      // navigate("/audit-manage/list");
+      setRefresh(id)
+      notification.info({
+        message: '通知',
+        description:
+          `您可以到审核列表中查看您的新闻`,
+        placement: "bottomRight",
+      })
+    })
 
+  }
   const columns = [
     {
       title: 'ID',
@@ -91,7 +103,7 @@ export default function NewsDraft() {
               type="primary"
               shape="circle"
               // icon={<EditOutlined />}
-              onClick={() => updateModal(record)}
+              onClick={() => handleCheck(record.id)}
               disabled={record.default}
             >审</Button>
           </div>
