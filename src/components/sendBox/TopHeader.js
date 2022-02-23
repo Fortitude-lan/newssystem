@@ -3,7 +3,7 @@
  * @Author: wanghexing
  * @Date: 2022-01-13 17:05:43
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-01-25 11:10:13
+ * @LastEditTime: 2022-02-23 17:17:43
  */
 import React, { useState } from 'react'
 import { useNavigate } from "react-router";
@@ -13,10 +13,16 @@ import {
     MenuUnfoldOutlined,
     MenuFoldOutlined,
 } from '@ant-design/icons';
+import { connect } from 'react-redux'
 const { Header } = Layout;
-export default function TopHeader() {
-    const [collapsed, setCollapsed] = useState(false);
-    const changeCollapsed = () => { setCollapsed(!collapsed) }
+
+function TopHeader(props) {
+    console.log(props);
+    // const [collapsed, setCollapsed] = useState(false);
+    const changeCollapsed = () => {
+        // setCollapsed(!collapsed)
+        props.changeCollapsed()
+    }
     let navigate = useNavigate();
     const { role: { roleName }, username } = JSON.parse(localStorage.getItem('token'))
     const menu = (
@@ -32,9 +38,10 @@ export default function TopHeader() {
     );
     return (
         <Header className="site-layout-background" style={{ padding: "0 16px" }}>
-            {
+            {/* {
                 collapsed ? <MenuUnfoldOutlined onClick={changeCollapsed} /> : <MenuFoldOutlined onClick={changeCollapsed} />
-            }
+            } */}
+            {props.isCollapsed ? <MenuUnfoldOutlined onClick={changeCollapsed} /> : <MenuFoldOutlined onClick={changeCollapsed} />}
             <div style={{ float: "right" }}>
                 欢迎 <span style={{ color: "#1890ff" }}>{username}</span> 回来！
                 <Dropdown overlay={menu}>
@@ -45,4 +52,12 @@ export default function TopHeader() {
         </Header>
     )
 }
-
+const mapStateToProps = ({ CollapsedReduxer: { isCollapsed } }) => ({ isCollapsed })
+const mapDispatchToProps = {
+    changeCollapsed() {
+        return {
+            type: "change_collapsed"
+        }
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(TopHeader)

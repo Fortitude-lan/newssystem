@@ -3,7 +3,7 @@
  * @Author: wanghexing
  * @Date: 2022-01-13 17:05:33
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-01-25 11:00:44
+ * @LastEditTime: 2022-02-23 17:22:46
  */
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from "react-router";
@@ -18,7 +18,7 @@ import {
 import './index.css'
 import axios from 'axios';
 const { Sider } = Layout;
-
+import { connect } from 'react-redux'
 const { SubMenu } = Menu;
 const MenuItem = Menu.Item
 // const menuList = [
@@ -69,7 +69,7 @@ const iconList = {
     "/publish-manage": <SettingOutlined />,
 }
 
-export default function SideMenu() {
+function SideMenu(props) {
     let navigate = useNavigate();
     let location = useLocation();
     const selectKeys = [location.pathname]; // ex: ['/home']
@@ -104,7 +104,7 @@ export default function SideMenu() {
 
     }
     return (
-        <Sider trigger={null} collapsible>
+        <Sider trigger={null} collapsible collapsed={props.isCollapsed}>
             <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
                 <div className="logo">全球新闻发布管理系统</div>
                 <div style={{ overflow: "auto" }}>
@@ -119,4 +119,5 @@ export default function SideMenu() {
         </Sider>
     )
 }
-
+const mapStateToProps = ({ CollapsedReduxer: { isCollapsed } }) => ({ isCollapsed })
+export default connect(mapStateToProps)(SideMenu)
