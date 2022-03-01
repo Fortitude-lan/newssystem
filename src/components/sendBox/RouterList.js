@@ -3,10 +3,12 @@
  * @Author: wanghexing
  * @Date: 2022-02-10 11:33:11
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-02-11 17:39:56
+ * @LastEditTime: 2022-02-28 17:47:35
  */
 import React, { useEffect, useState } from 'react'
 import { Route, Routes, Navigate } from 'react-router-dom'
+import { Spin } from 'antd';
+import { connect } from 'react-redux'
 import Home from '../../views/sendBox/home/Home'
 import NewsAdd from '../../views/sendBox/newsManage/NewsAdd'
 import NewsDraft from '../../views/sendBox/newsManage/NewsDraft'
@@ -22,6 +24,7 @@ import AuditList from '../../views/sendBox/auditManage/AuditList'
 import Unpublished from '../../views/sendBox/publishManage/Unpublished'
 import Published from '../../views/sendBox/publishManage/Published'
 import Sunset from '../../views/sendBox/publishManage/Sunset'
+
 import axios from 'axios';
 const LocalRouterMap = {
     "/home": <Home />,
@@ -40,7 +43,7 @@ const LocalRouterMap = {
     "/publish-manage/sunset": <Sunset />,
 
 }
-export default function RouterList() {
+function RouterList(props) {
     const [backRouteList, setbackRouteList] = useState([])
     useEffect(() => {
         Promise.all([
@@ -70,19 +73,25 @@ export default function RouterList() {
         //     <Route path="/" element={<Navigate replace from="/" to="home" />} />
         //     <Route path="*" element={<NoPermission />} />
         // </Routes>
-        <Routes>
-            {backRouteList.map((item) => {
-                if (checkRoute(item) && checkUserPermission(item)) {
-                    return <Route
-                        path={item.key}
-                        key={item.key}
-                        element={LocalRouterMap[item.key]}
-                    />
-                }
-                return null
-            })}
-            <Route path="/" element={<Navigate replace from="/" to="/home" />} />
-            {backRouteList.length > 0 && <Route path="*" element={<NoPermission />} />}
-        </Routes>
+        <Spin size="large" spinning={props.loading}>
+            <Routes>
+                {backRouteList.map((item) => {
+                    if (checkRoute(item) && checkUserPermission(item)) {
+                        return <Route
+                            path={item.key}
+                            key={item.key}
+                            element={LocalRouterMap[item.key]}
+                        />
+                    }
+                    return null
+                })}
+                <Route path="/" element={<Navigate replace from="/" to="/home" />} />
+                {backRouteList.length > 0 && <Route path="*" element={<NoPermission />} />}
+            </Routes>
+        </Spin>
+
+
     )
 }
+const mapStateToProps = ({ LoadingReduxer: { loading } }) => ({ loading })
+export default connect(mapStateToProps)(RouterList)

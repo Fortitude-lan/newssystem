@@ -3,17 +3,16 @@
  * @Author: wanghexing
  * @Date: 2022-01-13 17:19:08
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-01-20 11:59:52
+ * @LastEditTime: 2022-02-28 11:00:23
  */
 import React, { useState, useEffect } from 'react'
-import { Spin, Table, Button, Modal, Tree } from 'antd';
+import {Table, Button, Modal, Tree } from 'antd';
 import DragModal from '../../../components/DragModal'
 import axios from 'axios';
 import { DeleteOutlined, UnorderedListOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 const { confirm } = Modal
 
 export default function RoleList() {
-    const [loading, setloading] = useState(false)
     const [dataSource, setdataSource] = useState([])
     const [rightList, setrightList] = useState([])
     const [refresh, setRefresh] = useState(false);
@@ -22,15 +21,13 @@ export default function RoleList() {
     const [currentRight, setcurrentRight] = useState([])
 
     useEffect(() => {
-        setloading(true)
         axios.get('/roles').then(res => {
             setdataSource(res.data)
-            setloading(false)
         })
         axios.get('/rights?_embed=children').then(res => {
             // console.log(res.data)
             setrightList(res.data)
-            setloading(false)
+          
         })
 
     }, [refresh])
@@ -96,7 +93,6 @@ export default function RoleList() {
     }
     return (
         <div>
-            <Spin spinning={loading}>
                 <Table
                     dataSource={dataSource}
                     columns={columns}
@@ -106,7 +102,6 @@ export default function RoleList() {
                         pageSize: 5,
                     }}
                 />
-            </Spin>
 
             <DragModal
                 className="modal_h450"
@@ -123,7 +118,6 @@ export default function RoleList() {
                     </Button>
                   ]}
             >
-                <Spin spinning={loading}>
                     <Tree
                         checkable
                         checkStrictly
@@ -131,7 +125,6 @@ export default function RoleList() {
                         defaultCheckedKeys={currentRight} //非受控属性用useState控制
                         onCheck={(checkedKeys)=>{setcurrentRight(checkedKeys.checked)}}
                     />
-                </Spin>
             </DragModal>
         </div>
     )

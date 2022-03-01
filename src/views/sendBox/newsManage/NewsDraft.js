@@ -3,10 +3,10 @@
  * @Author: wanghexing
  * @Date: 2022-02-10 11:58:18
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-02-14 10:23:56
+ * @LastEditTime: 2022-02-28 11:00:38
  */
 import React, { useEffect, useState } from 'react'
-import { notification, Spin, Table, Tag, Button, Modal, Switch } from 'antd';
+import { notification, Table, Tag, Button, Modal, Switch } from 'antd';
 import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { useNavigate } from "react-router";
@@ -15,16 +15,13 @@ const { confirm } = Modal
 
 export default function NewsDraft() {
   const [dataSource, setdataSource] = useState([])
-  const [loading, setloading] = useState(false)
   const [refresh, setRefresh] = useState(false);
   const { username } = JSON.parse(localStorage.getItem('token'))
   const navigate = useNavigate();
   useEffect(() => {
-    setloading(true)
     axios.get(`/news?author=${username}&auditState=0&_expand=category`).then(res => {
       const list = res.data;
       setdataSource(list)
-      setloading(false)
     })
   }, [username, refresh])
   //删除确认
@@ -114,7 +111,6 @@ export default function NewsDraft() {
   ];
   return (
     <div>
-      <Spin spinning={loading}>
         <Table dataSource={dataSource} columns={columns}
           rowKey={(record) => record.id}
           scroll={{ y: 600 }}
@@ -122,7 +118,6 @@ export default function NewsDraft() {
             pageSize: 5,
           }}
         />
-      </Spin>
     </div>
   )
 }

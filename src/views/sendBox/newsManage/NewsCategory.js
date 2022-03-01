@@ -3,10 +3,10 @@
  * @Author: wanghexing
  * @Date: 2022-01-13 17:19:21
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-02-22 14:59:10
+ * @LastEditTime: 2022-02-28 17:55:34
  */
 import React, { useContext, useState, useEffect, useRef } from 'react';
-import { Spin, Table, Button, Modal, Form, Input } from 'antd';
+import { Table, Button, Modal, Form, Input } from 'antd';
 import axios from 'axios';
 import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 const EditableContext = React.createContext(null);
@@ -14,13 +14,10 @@ const { confirm } = Modal
 
 export default function RightList() {
   const [dataSource, setdataSource] = useState([])
-  const [loading, setloading] = useState(false)
   const [refresh, setRefresh] = useState(false);
   useEffect(() => {
-    setloading(true)
     axios.get('/categories').then(res => {
       setdataSource(res.data)
-      setloading(false)
     })
   }, [refresh])
   const handleSave = (record) => {
@@ -163,7 +160,6 @@ export default function RightList() {
   return (
 
     <div>
-      <Spin spinning={loading}>
         <Table dataSource={dataSource} columns={columns}
           rowKey={item => item.id}
           scroll={{ y: 600 }}
@@ -175,7 +171,6 @@ export default function RightList() {
             }
           }}
         />
-      </Spin>
 
     </div>
   )

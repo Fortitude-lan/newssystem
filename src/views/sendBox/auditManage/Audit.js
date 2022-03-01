@@ -3,15 +3,14 @@
  * @Author: wanghexing
  * @Date: 2022-02-10 12:00:00
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-02-21 11:37:08
+ * @LastEditTime: 2022-02-28 10:59:41
  */
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
-import { notification, Spin, Table, Button, Modal, } from 'antd';
+import { notification,  Table, Button, Modal, } from 'antd';
 import { useNavigate } from "react-router";
 export default function Audit() {
   const [dataSource, setdataSource] = useState([])
-  const [loading, setloading] = useState(false)
   const [refresh, setRefresh] = useState(false);
   const { roleId, region, username } = JSON.parse(localStorage.getItem('token'))
   const navigate = useNavigate();
@@ -85,7 +84,6 @@ export default function Audit() {
   ];
   return (
     <div>
-      <Spin spinning={loading}>
         <Table dataSource={dataSource} columns={columns}
           rowKey={(record) => record.id}
           scroll={{ y: 600 }}
@@ -93,7 +91,6 @@ export default function Audit() {
             pageSize: 5,
           }}
         />
-      </Spin>
     </div>
   )
 }

@@ -3,24 +3,21 @@
  * @Author: wanghexing
  * @Date: 2022-01-13 17:19:21
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-01-21 12:59:25
+ * @LastEditTime: 2022-02-28 11:00:27
  */
 import React, { useEffect, useState } from 'react'
-import { Spin, Table, Tag, Button, Modal, Switch } from 'antd';
+import {  Table, Tag, Button, Modal, Switch } from 'antd';
 import axios from 'axios';
 import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 const { confirm } = Modal
 
 export default function RightList() {
     const [dataSource, setdataSource] = useState([])
-    const [loading, setloading] = useState(false)
     const [refresh, setRefresh] = useState(false);
     useEffect(() => {
-        setloading(true)
         axios.get('/rights?_embed=children').then(res => {
             const list = res.data;
             setdataSource(mapList(list))
-            setloading(false)
         })
     }, [refresh])
 
@@ -145,14 +142,12 @@ export default function RightList() {
     return (
 
         <div>
-            <Spin spinning={loading}>
                 <Table dataSource={dataSource} columns={columns}
                     scroll={{ y: 600 }}
                     pagination={{
                         pageSize: 5,
                     }}
                 />
-            </Spin>
 
         </div>
     )

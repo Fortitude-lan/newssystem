@@ -3,11 +3,11 @@
  * @Author: wanghexing
  * @Date: 2022-01-13 17:18:30
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-02-10 11:22:37
+ * @LastEditTime: 2022-02-28 11:00:07
  */
 
 import React, { useState, useEffect, useRef } from 'react'
-import { Spin, Table, Button, Modal, Switch } from 'antd';
+import { Table, Button, Modal, Switch } from 'antd';
 import DragModal from '../../../components/DragModal'
 import axios from 'axios';
 import Useform from './Useform';
@@ -17,7 +17,6 @@ const { confirm } = Modal
 export default function UserList() {
     const addForm = useRef(null)
     const updateForm = useRef(null)
-    const [loading, setloading] = useState(false)
     const [dataSource, setdataSource] = useState([])
     const [regionList, setregionList] = useState([])
     const [roleList, setroleList] = useState([])
@@ -28,23 +27,22 @@ export default function UserList() {
 
     const { roleId, region } = JSON.parse(localStorage.getItem('token'))
     useEffect(() => {
-        setloading(true)
         //用户列表
         axios.get('/users?_expand=role').then(res => {
             const list = res.data
             setdataSource(roleId === 1 ? list : list.filter(i => i.region == region))
-        }).then(setloading(false))
+        })
         //地区列表
         axios.get('/regions').then(res => {
             const list = res.data
             console.log(list);
             setregionList(roleId === 1 ? list : list.filter(i => i.value == region))
-        }).then(setloading(false))
+        })
         //角色列表
         axios.get('/roles').then(res => {
             const list = res.data
             setroleList(roleId === 1 ? list : list.filter(i => i.roleType > roleId))
-        }).then(setloading(false))
+        })
     }, [refresh])
     //删除确认
     const confirmMethod = (record) => {
@@ -175,7 +173,6 @@ export default function UserList() {
     return (
         <div>
             <Button type="primary" onClick={addModal}>添加用户</Button>
-            <Spin spinning={loading}>
                 <Table
                     dataSource={dataSource}
                     columns={columns}
@@ -185,7 +182,6 @@ export default function UserList() {
                         pageSize: 10,
                     }}
                 />
-            </Spin>
             <DragModal
                 className="modal_h450"
                 title="添加用户"

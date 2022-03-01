@@ -3,10 +3,10 @@
  * @Author: wanghexing
  * @Date: 2022-02-10 12:00:16
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-02-22 15:06:18
+ * @LastEditTime: 2022-02-28 11:00:49
  */
 import React, { useEffect, useState } from 'react'
-import { notification, Spin, Table, Tag, Button, Modal, Switch } from 'antd';
+import { notification,  Table, Tag, Button, Modal, Switch } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { useNavigate } from "react-router";
@@ -14,17 +14,15 @@ import { useNavigate } from "react-router";
 const { confirm } = Modal
 export default function AuditList() {
   const [dataSource, setdataSource] = useState([])
-  const [loading, setloading] = useState(false)
   const [refresh, setRefresh] = useState(false);
   const { username } = JSON.parse(localStorage.getItem('token'))
   const navigate = useNavigate();
   useEffect(() => {
-    setloading(true) //_ne:!=  lte:<   gte: > [auditState_ne=0]
+     //_ne:!=  lte:<   gte: > [auditState_ne=0]
     axios.get(`/news?author=${username}&auditState_ne=0&publishState_lte=1&_expand=category`).then(res => {
       const list = res.data;
       console.log(list);
       setdataSource(list)
-      setloading(false)
     })
   }, [username, refresh])
 
@@ -118,8 +116,6 @@ export default function AuditList() {
   ];
   return (
     <div>
-
-      <Spin spinning={loading}>
         <Table dataSource={dataSource} columns={columns}
           rowKey={(record) => record.id}
           scroll={{ y: 600 }}
@@ -127,7 +123,6 @@ export default function AuditList() {
             pageSize: 5,
           }}
         />
-      </Spin>
     </div>
   )
 }
