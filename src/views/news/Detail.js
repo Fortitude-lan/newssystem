@@ -3,7 +3,7 @@
  * @Author: wanghexing
  * @Date: 2022-02-11 17:24:22
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-03-28 22:08:24
+ * @LastEditTime: 2022-03-28 23:59:21
  */
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
@@ -29,8 +29,6 @@ export default function Detail(props) {
                             <div>
                                 {newsInfo.category.title}
                                 <HeartTwoTone twoToneColor="#eb2f96" />
-                                
-                                
                             </div>
                         }
                     >
