@@ -3,7 +3,7 @@
  * @Author: wanghexing
  * @Date: 2022-01-13 17:05:43
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-02-23 17:17:43
+ * @LastEditTime: 2022-03-25 17:05:10
  */
 import React, { useState } from 'react'
 import { useNavigate } from "react-router";
@@ -17,7 +17,7 @@ import { connect } from 'react-redux'
 const { Header } = Layout;
 
 function TopHeader(props) {
-    console.log(props);
+    // console.log(props);
     // const [collapsed, setCollapsed] = useState(false);
     const changeCollapsed = () => {
         // setCollapsed(!collapsed)

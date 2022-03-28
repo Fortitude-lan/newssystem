@@ -3,7 +3,7 @@
  * @Author: wanghexing
  * @Date: 2022-01-13 17:05:33
  * @LastEditors: wanghexing
- * @LastEditTime: 2022-02-23 17:22:46
+ * @LastEditTime: 2022-03-28 14:54:45
  */
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from "react-router";
@@ -90,6 +90,7 @@ function SideMenu(props) {
     }
 
     const renderMenu = (menu) => {
+        // console.log(menu);
         return menu.map(item => {
             if (item.children?.length > 0 && hasPermisson(item)) {
                 return <SubMenu key={item.key} icon={iconList[item.key]} title={item.title}>
